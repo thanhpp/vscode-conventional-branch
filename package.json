@@ -27,7 +27,7 @@
     "commands": [
       {
         "command": "conventionalBranch.create",
-        "title": "Create Conventional Branch",
+        "title": "Checkout",
         "category": "Conventional Branch",
         "icon": "$(git-branch)"
       },

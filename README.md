@@ -24,7 +24,7 @@ A VSCode extension that guides you through creating conventionally-named Git bra
 
 ### Create a branch
 
-- Open the **Command Palette** (`Ctrl+Shift+P`) → `Conventional Branch: Create Conventional Branch`
+- Open the **Command Palette** (`Ctrl+Shift+P`) → `Conventional Branch: Checkout`
 - Or click the **branch icon** in the Source Control title bar
 
 The wizard will guide you through each token defined in your format template.
@@ -75,7 +75,7 @@ Commit a `.vscode/settings.json` to share types/scopes/services across your team
 
 | Command                                           | Description                               |
 | ------------------------------------------------- | ----------------------------------------- |
-| `Conventional Branch: Create Conventional Branch` | Open the branch creation wizard           |
+| `Conventional Branch: Checkout`                   | Open the branch creation wizard           |
 | `Conventional Branch: Cleanup Local Branches`     | Delete local branches + prune remote refs |
 | `Conventional Branch: Clear Cached User Prefix`   | Reset the stored user prefix              |
 
