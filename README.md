@@ -38,19 +38,19 @@ The wizard will guide you through each token defined in your format template.
 
 All settings are under `conventionalBranch.*` in your VSCode settings.
 
-| Setting | Default | Description |
-|---|---|---|
-| `format` | `{user}:{scope}/{type}/{service}/{description}` | Branch name template |
-| `user` | `""` | Default user prefix (prompted on first use if empty) |
-| `types` | `["feat","fix","hotfix",...]` | Selectable branch types |
-| `scopes` | `[]` | Selectable scopes — empty means free-text input |
-| `services` | `[]` | Selectable services — empty means free-text input |
-| `scopeRequired` | `false` | If false, scope shows a (skip) option |
-| `descriptionSeparator` | `"-"` | Word separator in the description slug |
-| `lowercaseOnly` | `true` | Force all segments lowercase |
-| `maxLength` | `80` | Max branch name length (0 = unlimited) |
-| `autoPush` | `false` | Push new branch to remote after creation |
-| `baseBranch` | `""` | Base branch to create from (empty = current HEAD) |
+| Setting                | Default                                         | Description                                          |
+| ---------------------- | ----------------------------------------------- | ---------------------------------------------------- |
+| `format`               | `{user}:{scope}/{type}/{service}/{description}` | Branch name template                                 |
+| `user`                 | `""`                                            | Default user prefix (prompted on first use if empty) |
+| `types`                | `["feat","fix","hotfix",...]`                   | Selectable branch types                              |
+| `scopes`               | `[]`                                            | Selectable scopes — empty means free-text input      |
+| `services`             | `[]`                                            | Selectable services — empty means free-text input    |
+| `scopeRequired`        | `false`                                         | If false, scope shows a (skip) option                |
+| `descriptionSeparator` | `"-"`                                           | Word separator in the description slug               |
+| `lowercaseOnly`        | `true`                                          | Force all segments lowercase                         |
+| `maxLength`            | `80`                                            | Max branch name length (0 = unlimited)               |
+| `autoPush`             | `false`                                         | Push new branch to remote after creation             |
+| `baseBranch`           | `""`                                            | Base branch to create from (empty = current HEAD)    |
 
 ### Custom format example
 
@@ -73,11 +73,11 @@ Commit a `.vscode/settings.json` to share types/scopes/services across your team
 
 ## Commands
 
-| Command | Description |
-|---|---|
-| `Conventional Branch: Create Conventional Branch` | Open the branch creation wizard |
-| `Conventional Branch: Cleanup Local Branches` | Delete local branches + prune remote refs |
-| `Conventional Branch: Clear Cached User Prefix` | Reset the stored user prefix |
+| Command                                           | Description                               |
+| ------------------------------------------------- | ----------------------------------------- |
+| `Conventional Branch: Create Conventional Branch` | Open the branch creation wizard           |
+| `Conventional Branch: Cleanup Local Branches`     | Delete local branches + prune remote refs |
+| `Conventional Branch: Clear Cached User Prefix`   | Reset the stored user prefix              |
 
 ## Requirements
 

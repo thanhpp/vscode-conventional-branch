@@ -1,7 +1,11 @@
 {
   "publisher": "thanhpp",
-  "name": "conventional-branch",
-  "displayName": "Conventional Branch",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/thanhpp/vscode-conventional-branch"
+  },
+  "name": "another-conventional-branch",
+  "displayName": "Another Conventional Branch",
   "description": "Create conventionally-named Git branches via a step-by-step wizard",
   "version": "0.1.0",
   "engines": {
