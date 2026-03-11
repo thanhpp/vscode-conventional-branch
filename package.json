@@ -58,7 +58,7 @@
       "properties": {
         "conventionalBranch.format": {
           "type": "string",
-          "default": "{user}:{scope}/{type}/{service}/{description}",
+          "default": "{user}/{scope}/{type}/{service}/{description}",
           "description": "Branch name template. Use {user}, {scope}, {type}, {service}, {description} as placeholders."
         },
         "conventionalBranch.user": {

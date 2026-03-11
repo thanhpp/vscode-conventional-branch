@@ -66,8 +66,7 @@ export function validateBranchName(name: string): string | undefined {
     return 'Branch name cannot contain "..".';
   }
 
-  // Note: colon (:) is allowed in local branch names (used as user prefix separator)
-  if (/[\s~^?*[\\\x00-\x1f\x7f]/.test(name)) {
+  if (/[\s~^:?*[\\\x00-\x1f\x7f]/.test(name)) {
     return "Branch name contains invalid characters.";
   }
 
@@ -107,14 +106,14 @@ export function sanitizeBranchName(
   // Remove @{ sequences
   result = result.replace(/@\{/g, "");
 
-  // Remove characters invalid in git refs (but keep structural chars like / : -)
-  result = result.replace(/[~^?*[\\\x00-\x1f\x7f]/g, separator);
+  // Remove characters invalid in git refs (but keep structural chars like / -)
+  result = result.replace(/[~^:?*[\\\x00-\x1f\x7f]/g, separator);
 
   // Collapse consecutive slashes
   result = result.replace(/\/\/+/g, "/");
 
-  // Collapse consecutive separators (that are not slashes or colons)
-  if (separator !== "/" && separator !== ":") {
+  // Collapse consecutive separators (that are not slashes)
+  if (separator !== "/") {
     const escapedSep = escapeRegex(separator);
     result = result.replace(new RegExp(`${escapedSep}{2,}`, "g"), separator);
   }

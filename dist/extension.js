@@ -56,7 +56,7 @@ var DEFAULT_TYPES = [
 ];
 var DEFAULT_SCOPES = [];
 var DEFAULT_SERVICES = [];
-var DEFAULT_FORMAT = "{user}:{scope}/{type}/{service}/{description}";
+var DEFAULT_FORMAT = "{user}/{scope}/{type}/{service}/{description}";
 var DEFAULT_DESCRIPTION_SEPARATOR = "-";
 var DEFAULT_MAX_LENGTH = 80;
 var MRU_MAX_ITEMS = 10;
@@ -157,7 +157,7 @@ function validateBranchName(name) {
   if (/\.\./.test(name)) {
     return 'Branch name cannot contain "..".';
   }
-  if (/[\s~^?*[\\\x00-\x1f\x7f]/.test(name)) {
+  if (/[\s~^:?*[\\\x00-\x1f\x7f]/.test(name)) {
     return "Branch name contains invalid characters.";
   }
   if (/@\{/.test(name)) {
@@ -178,9 +178,9 @@ function sanitizeBranchName(name, separator = "-", lowercase = true, maxLength =
   }
   result = result.replace(/\.\./g, ".");
   result = result.replace(/@\{/g, "");
-  result = result.replace(/[~^?*[\\\x00-\x1f\x7f]/g, separator);
+  result = result.replace(/[~^:?*[\\\x00-\x1f\x7f]/g, separator);
   result = result.replace(/\/\/+/g, "/");
-  if (separator !== "/" && separator !== ":") {
+  if (separator !== "/") {
     const escapedSep = escapeRegex(separator);
     result = result.replace(new RegExp(`${escapedSep}{2,}`, "g"), separator);
   }

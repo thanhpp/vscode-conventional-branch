@@ -61,8 +61,9 @@ describe("validateBranchName", () => {
     expect(validateBranchName("feat/add-rate-limiter")).toBeUndefined();
   });
 
-  it("accepts a branch with colon", () => {
-    expect(validateBranchName("ty:feat/add-thing")).toBeUndefined();
+  it("rejects a branch with colon", () => {
+    // Git does not allow colons in branch names (git-check-ref-format)
+    expect(validateBranchName("ty:feat/add-thing")).toBeDefined();
   });
 
   it("rejects empty string", () => {
@@ -161,13 +162,25 @@ describe("sanitizeBranchName", () => {
 
   it("produces a valid branch name for the default format", () => {
     const result = sanitizeBranchName(
-      "ty:api/feat/order-service/add-rate-limiter",
+      "ty/api/feat/order-service/add-rate-limiter",
       "-",
       true,
       80,
     );
     expect(validateBranchName(result)).toBeUndefined();
-    expect(result).toBe("ty:api/feat/order-service/add-rate-limiter");
+    expect(result).toBe("ty/api/feat/order-service/add-rate-limiter");
+  });
+
+  it("replaces colon with separator (colon is invalid in git branch names)", () => {
+    // Regression: thanhpp:refactor/go-mod/update-trading-clients was rejected by git
+    const result = sanitizeBranchName(
+      "thanhpp:refactor/go-mod/update-trading-clients",
+      "-",
+      true,
+      80,
+    );
+    expect(result).not.toContain(":");
+    expect(validateBranchName(result)).toBeUndefined();
   });
 
   it("collapses double dots", () => {

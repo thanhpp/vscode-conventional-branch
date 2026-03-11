@@ -21,7 +21,7 @@ export const DEFAULT_SCOPES: string[] = [];
 
 export const DEFAULT_SERVICES: string[] = [];
 
-export const DEFAULT_FORMAT = "{user}:{scope}/{type}/{service}/{description}";
+export const DEFAULT_FORMAT = "{user}/{scope}/{type}/{service}/{description}";
 
 export const DEFAULT_DESCRIPTION_SEPARATOR = "-";
 
