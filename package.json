@@ -1,0 +1,155 @@
+{
+  "name": "conventional-branch",
+  "displayName": "Conventional Branch",
+  "description": "Create conventionally-named Git branches via a step-by-step wizard",
+  "version": "0.1.0",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "SCM Providers",
+    "Other"
+  ],
+  "keywords": [
+    "git",
+    "branch",
+    "conventional",
+    "workflow"
+  ],
+  "activationEvents": [
+    "onCommand:conventionalBranch.create",
+    "onCommand:conventionalBranch.cleanup",
+    "onCommand:conventionalBranch.clearUserCache"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "conventionalBranch.create",
+        "title": "Create Conventional Branch",
+        "category": "Conventional Branch",
+        "icon": "$(git-branch)"
+      },
+      {
+        "command": "conventionalBranch.cleanup",
+        "title": "Cleanup Local Branches",
+        "category": "Conventional Branch",
+        "icon": "$(trash)"
+      },
+      {
+        "command": "conventionalBranch.clearUserCache",
+        "title": "Clear Cached User Prefix",
+        "category": "Conventional Branch",
+        "icon": "$(clear-all)"
+      }
+    ],
+    "menus": {
+      "scm/title": [
+        {
+          "command": "conventionalBranch.create",
+          "group": "navigation",
+          "when": "scmProvider == git"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Conventional Branch",
+      "properties": {
+        "conventionalBranch.format": {
+          "type": "string",
+          "default": "{user}:{scope}/{type}/{service}/{description}",
+          "description": "Branch name template. Use {user}, {scope}, {type}, {service}, {description} as placeholders."
+        },
+        "conventionalBranch.user": {
+          "type": "string",
+          "default": "",
+          "description": "Default user prefix for branch names."
+        },
+        "conventionalBranch.types": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [
+            "feat",
+            "fix",
+            "hotfix",
+            "chore",
+            "refactor",
+            "docs",
+            "test",
+            "ci",
+            "perf",
+            "style",
+            "build",
+            "revert"
+          ],
+          "description": "Selectable branch types."
+        },
+        "conventionalBranch.scopes": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Selectable scopes. Empty array enables free-text input."
+        },
+        "conventionalBranch.services": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "default": [],
+          "description": "Selectable services/components. Empty array enables free-text input."
+        },
+        "conventionalBranch.scopeRequired": {
+          "type": "boolean",
+          "default": false,
+          "description": "If false, scope step shows a (skip) option."
+        },
+        "conventionalBranch.descriptionSeparator": {
+          "type": "string",
+          "default": "-",
+          "description": "Word separator within the description slug."
+        },
+        "conventionalBranch.lowercaseOnly": {
+          "type": "boolean",
+          "default": true,
+          "description": "Force all segments lowercase."
+        },
+        "conventionalBranch.maxLength": {
+          "type": "number",
+          "default": 80,
+          "description": "Max branch name length. 0 means unlimited."
+        },
+        "conventionalBranch.autoPush": {
+          "type": "boolean",
+          "default": false,
+          "description": "Push new branch to remote after creation."
+        },
+        "conventionalBranch.baseBranch": {
+          "type": "string",
+          "default": "",
+          "description": "Base branch to create from. Empty means current HEAD."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run build",
+    "build": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "lint": "eslint src --ext ts",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^7.0.0",
+    "@typescript-eslint/parser": "^7.0.0",
+    "esbuild": "^0.20.0",
+    "eslint": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  }
+}
