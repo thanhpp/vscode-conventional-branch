@@ -1,4 +1,5 @@
 {
+  "publisher": "thanhpp",
   "name": "conventional-branch",
   "displayName": "Conventional Branch",
   "description": "Create conventionally-named Git branches via a step-by-step wizard",
@@ -16,11 +17,7 @@
     "conventional",
     "workflow"
   ],
-  "activationEvents": [
-    "onCommand:conventionalBranch.create",
-    "onCommand:conventionalBranch.cleanup",
-    "onCommand:conventionalBranch.clearUserCache"
-  ],
+  "activationEvents": [],
   "main": "./dist/extension.js",
   "contributes": {
     "commands": [

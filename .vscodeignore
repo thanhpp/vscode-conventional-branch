@@ -1,0 +1,11 @@
+.claude/**
+.eslintrc.json
+.prettierrc
+src/**
+test/**
+vitest.config.ts
+tsconfig.json
+esbuild.js
+dist/extension.js.map
+node_modules/**
+.gitignore
