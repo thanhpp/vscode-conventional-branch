@@ -7,7 +7,7 @@
   "name": "another-conventional-branch",
   "displayName": "Another Conventional Branch",
   "description": "Create conventionally-named Git branches via a step-by-step wizard",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "engines": {
     "vscode": "^1.85.0"
   },
