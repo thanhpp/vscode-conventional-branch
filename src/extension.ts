@@ -4,6 +4,7 @@ import { getGitAPI, pickRepository } from "./utils/git";
 import { runWizard } from "./wizard/runner";
 import { createBranch } from "./branch/creator";
 import { cleanupBranches } from "./branch/cleanup";
+import { pickBranchOrCreate, CREATE_NEW } from "./branch/checkout";
 import { GLOBAL_STATE_KEYS } from "./config/defaults";
 
 export function activate(context: vscode.ExtensionContext): void {
@@ -24,14 +25,27 @@ export function activate(context: vscode.ExtensionContext): void {
         return; // User cancelled or no repo found
       }
 
-      const config = getConfig();
-
-      const branchName = await runWizard(config, context);
-      if (!branchName) {
+      const choice = await pickBranchOrCreate(repo);
+      if (!choice) {
         return; // User cancelled
       }
 
-      await createBranch(repo, branchName, config.baseBranch || undefined, config.autoPush);
+      if (choice === CREATE_NEW) {
+        const config = getConfig();
+        const branchName = await runWizard(config, context);
+        if (!branchName) {
+          return; // User cancelled wizard
+        }
+        await createBranch(repo, branchName, config.baseBranch || undefined, config.autoPush);
+      } else {
+        try {
+          await repo.checkout(choice);
+        } catch (err) {
+          void vscode.window.showErrorMessage(
+            `Failed to checkout '${choice}': ${err instanceof Error ? err.message : String(err)}`,
+          );
+        }
+      }
     },
   );
 

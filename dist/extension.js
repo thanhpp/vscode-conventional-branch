@@ -34,7 +34,7 @@ __export(extension_exports, {
   deactivate: () => deactivate
 });
 module.exports = __toCommonJS(extension_exports);
-var vscode11 = __toESM(require("vscode"));
+var vscode12 = __toESM(require("vscode"));
 
 // src/config/settings.ts
 var vscode = __toESM(require("vscode"));
@@ -921,14 +921,72 @@ ${branchList}`,
   }
 }
 
+// src/branch/checkout.ts
+var vscode11 = __toESM(require("vscode"));
+var CREATE_NEW = "__create_new__";
+async function pickBranchOrCreate(repo) {
+  var _a;
+  const [localBranches, remoteBranches] = await Promise.all([
+    repo.getBranches({ remote: false }),
+    repo.getBranches({ remote: true })
+  ]);
+  const currentBranch = (_a = repo.state.HEAD) == null ? void 0 : _a.name;
+  const items = [];
+  items.push({
+    label: "$(add) Create a new conventional branch",
+    description: "Open the branch creation wizard",
+    alwaysShow: true
+  });
+  const localFiltered = localBranches.filter(
+    (b) => !!b.name && b.name !== "HEAD"
+  );
+  if (localFiltered.length > 0) {
+    items.push({ label: "Local", kind: vscode11.QuickPickItemKind.Separator });
+    for (const b of localFiltered) {
+      const isCurrent = b.name === currentBranch;
+      items.push({
+        label: b.name,
+        description: isCurrent ? "$(check) current" : b.commit ? b.commit.slice(0, 7) : void 0,
+        checkoutName: b.name
+      });
+    }
+  }
+  const remoteFiltered = remoteBranches.filter(
+    (b) => !!b.name && !!b.remote && !b.name.endsWith("/HEAD")
+  );
+  if (remoteFiltered.length > 0) {
+    items.push({ label: "Remote", kind: vscode11.QuickPickItemKind.Separator });
+    for (const b of remoteFiltered) {
+      const localName = b.name.slice(b.remote.length + 1);
+      items.push({
+        label: b.name,
+        description: b.commit ? b.commit.slice(0, 7) : void 0,
+        checkoutName: localName
+      });
+    }
+  }
+  const picked = await vscode11.window.showQuickPick(items, {
+    title: "Conventional Branch \u2014 Checkout or Create",
+    placeHolder: "Select a branch to checkout, or create a new one",
+    ignoreFocusOut: true
+  });
+  if (!picked) {
+    return void 0;
+  }
+  if (!picked.checkoutName) {
+    return CREATE_NEW;
+  }
+  return picked.checkoutName;
+}
+
 // src/extension.ts
 function activate(context) {
-  const createCmd = vscode11.commands.registerCommand(
+  const createCmd = vscode12.commands.registerCommand(
     "conventionalBranch.create",
     async () => {
       const gitAPI = getGitAPI();
       if (!gitAPI) {
-        void vscode11.window.showErrorMessage(
+        void vscode12.window.showErrorMessage(
           "Git extension is not available. Please ensure the built-in Git extension is active."
         );
         return;
@@ -937,20 +995,34 @@ function activate(context) {
       if (!repo) {
         return;
       }
-      const config = getConfig();
-      const branchName = await runWizard(config, context);
-      if (!branchName) {
+      const choice = await pickBranchOrCreate(repo);
+      if (!choice) {
         return;
       }
-      await createBranch(repo, branchName, config.baseBranch || void 0, config.autoPush);
+      if (choice === CREATE_NEW) {
+        const config = getConfig();
+        const branchName = await runWizard(config, context);
+        if (!branchName) {
+          return;
+        }
+        await createBranch(repo, branchName, config.baseBranch || void 0, config.autoPush);
+      } else {
+        try {
+          await repo.checkout(choice);
+        } catch (err) {
+          void vscode12.window.showErrorMessage(
+            `Failed to checkout '${choice}': ${err instanceof Error ? err.message : String(err)}`
+          );
+        }
+      }
     }
   );
-  const cleanupCmd = vscode11.commands.registerCommand(
+  const cleanupCmd = vscode12.commands.registerCommand(
     "conventionalBranch.cleanup",
     async () => {
       const gitAPI = getGitAPI();
       if (!gitAPI) {
-        void vscode11.window.showErrorMessage(
+        void vscode12.window.showErrorMessage(
           "Git extension is not available. Please ensure the built-in Git extension is active."
         );
         return;
@@ -962,11 +1034,11 @@ function activate(context) {
       await cleanupBranches(repo);
     }
   );
-  const clearUserCmd = vscode11.commands.registerCommand(
+  const clearUserCmd = vscode12.commands.registerCommand(
     "conventionalBranch.clearUserCache",
     async () => {
       await context.globalState.update(GLOBAL_STATE_KEYS.USER_CACHE, void 0);
-      void vscode11.window.showInformationMessage("Conventional Branch: User prefix cache cleared.");
+      void vscode12.window.showInformationMessage("Conventional Branch: User prefix cache cleared.");
     }
   );
   context.subscriptions.push(createCmd, cleanupCmd, clearUserCmd);
